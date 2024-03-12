@@ -14,8 +14,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class Main {
+
     public static void main (String[] args){
-        ApiClient apiClient = new ApiClient();
+        String accessKey = "polaris";
+        String secretKey = "abcdefgh";
+        ApiClient apiClient = new ApiClient(accessKey,secretKey);
         User user = new User();
         user.setUsername("开心果3");
         log.info("-----{}",apiClient.getNameByGet("开心果1"));

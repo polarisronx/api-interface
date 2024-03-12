@@ -29,7 +29,15 @@ public class NameController {
         return "Hello!We've post your name: "+name;
     }
     @PostMapping("/c")
-    public String getNameByPost2(@RequestBody User user){
+    public String getNameByPost2(@RequestBody User user,HttpServletRequest  request){
+        // 从请求头中获取 AK和SK 的值
+        String accessKey = request.getHeader("accessKey");
+        String secretKey = request.getHeader("secretKey");
+        // 进行 AK和SK 的验证逻辑
+        if (!accessKey.equals("polaris")||!secretKey.equals("abcdefgh")){
+            // 抛出运行时异常，表示权限不足
+            throw new RuntimeException("权限不足");
+        }
         return  "Hello!We've post your name: "+user.getUsername();
     }
 }
