@@ -1,5 +1,6 @@
 package com.polaris.apiinterface.client;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 
+import static com.polaris.apiinterface.utils.SignUtils.genSign;
+
 /**
  * @Author polaris
  * @Create 2024-03-08 15:24
@@ -23,6 +26,7 @@ import java.util.HashMap;
 @Slf4j
 public class ApiClient {
 
+    // ak 和 sk 一般由平台提供
     private String accessKey;
     private String secretKey;
 
@@ -30,11 +34,27 @@ public class ApiClient {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
     }
-    // 构造请求头的私有方法
-    private HashMap<String, String> getHeaders() {
+
+    /*
+     * 构造请求头的私有方法
+     * @return headers
+     * @author polaris
+     * @create 2024/3/13
+     **/
+
+    private HashMap<String, String> getHeaders(String body) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("accessKey", accessKey);
+        // 添加4位数字的随机数
+        headers.put("nonce", RandomUtil.randomNumbers(4));
+        // 添加包含用户参数的请求体内容
+        headers.put("body",body);
+        // 添加当前时间戳
+        headers.put("timestamp",String.valueOf(System.currentTimeMillis()/1000));
         headers.put("secretKey", secretKey);
+        // 用以上参数获取签名，并把签名也放入请求头
+        // 其他参数会添加到请求头中直接发送，但是密钥不能直接在服务器间传递。
+        headers.put("sign",genSign(body,secretKey));
         return headers;
     }
 
@@ -63,7 +83,7 @@ public class ApiClient {
         // 使用HttpRequest库发送POST请求，并获取服务器的响应
         HttpResponse httpResponse = HttpRequest.post("http://localhost:8123/api/name/c")
                 .body(jsonStr)// 将json字符串设置为请求体
-                .addHeaders(getHeaders())// 添加请求头，携带AK和SK
+                .addHeaders(getHeaders(jsonStr))// 添加请求头，携带AK和SK
                 .execute();// 执行请求
         int status = httpResponse.getStatus();
         String result = httpResponse.body();

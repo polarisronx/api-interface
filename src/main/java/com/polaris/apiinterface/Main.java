@@ -20,9 +20,9 @@ public class Main {
         String secretKey = "abcdefgh";
         ApiClient apiClient = new ApiClient(accessKey,secretKey);
         User user = new User();
-        user.setUsername("开心果3");
-        log.info("-----{}",apiClient.getNameByGet("开心果1"));
-        log.info("-----{}",apiClient.getNameByPost1("开心果2"));
+        user.setUsername("dayDayHappy");
+//        log.info("-----{}",apiClient.getNameByGet("开心果1"));
+//        log.info("-----{}",apiClient.getNameByPost1("开心果2"));
         log.info("-----{}",apiClient.getNameByPost2(user));
     }
 }
