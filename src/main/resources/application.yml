@@ -2,3 +2,7 @@ server:
   port: 8123
   servlet:
     context-path: /api
+papi:
+  client:
+    access-key: polaris
+    secret-key: abcdefgh

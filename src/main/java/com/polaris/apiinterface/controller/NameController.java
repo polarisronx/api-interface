@@ -1,9 +1,11 @@
 package com.polaris.apiinterface.controller;
 
-import com.polaris.apiinterface.model.User;
+
 import java.util.Arrays;
 
-import com.polaris.apiinterface.utils.SignUtils;
+
+import com.polaris.papiclientsdk.model.User;
+import com.polaris.papiclientsdk.utils.SignUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +34,7 @@ public class NameController {
         return "Hello!We've post your name: "+name;
     }
     @PostMapping("/c")
-    public String getNameByPost2(@RequestBody User user,HttpServletRequest  request){
+    public String getNameByPost2(@RequestBody User user, HttpServletRequest  request){
         // 从请求头中获取 签名认证的参数 的值
         String accessKey = request.getHeader("accessKey");
 //        String secretKey = request.getHeader("secretKey"); 不能直接获取获取到密钥
